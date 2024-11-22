@@ -21,9 +21,9 @@ function NavBar() {
             {
                 navLinks.map(link =>
                     <li key={link.href} className={classnames({
-                        'text-zinc-200':link.href === currentPath,
-                        'text-zinc-400':link.href !== currentPath,
-                        'hover:text-zinc-300 transition-colors': true
+                        'text-zinc-800':link.href === currentPath,
+                        'text-zinc-500':link.href !== currentPath,
+                        'hover:text-zinc-700 transition-colors': true
                         })}>
                         <Link href={link.href}>{link.label}</Link>
                     </li>
