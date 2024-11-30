@@ -30,7 +30,7 @@ export default function RootLayout({
         <Theme accentColor="iris">
           <NavBar/>
 
-          <main className='p-5'>
+          <main className='p-5 md:px-24'>
             {children}
           </main> 
           </Theme>         

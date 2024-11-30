@@ -23,23 +23,27 @@ function NewIssue() {
   const {register, control, handleSubmit, formState: { errors }} = useForm<IssueForm>({
     resolver :zodResolver(createIssuesSchema)
   });
+
+  const OnSubmit = handleSubmit(async (data) =>{
+    try {
+      setIsSubmit(true)
+        await axios.post('/api/issues', data)
+        router.push('/issues')
+    } catch (error) {
+      setIsSubmit(false)
+      setError("Unespected error")
+    }
+
+  })
   
   return (
     <div className="max-w-100">
+      
       {error && <Callout.Root color="red">
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>}
-      <form className=' space-y-4' onSubmit={handleSubmit(async (data) =>{
-        try {
-          setIsSubmit(true)
-            await axios.post('/api/issues', data)
-            router.push('/issues')
-        } catch (error) {
-          setIsSubmit(false)
-          setError("Unespected error")
-        }
 
-      })}>
+      <form className=' space-y-4' onSubmit={OnSubmit}>
           <h1>Create New Issue</h1>
           <TextField.Root placeholder="Title"  {...register('title')} />
           <ErrorMessage>
