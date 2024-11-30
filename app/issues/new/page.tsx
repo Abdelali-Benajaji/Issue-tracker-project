@@ -3,7 +3,7 @@ import React from 'react'
 
 function NewIssue() {
   return (
-    <div className='m-w-80 space-y-4'>
+    <div className='max-w-80 space-y-4'>
         <h1>Create New Issue</h1>
         <TextField.Root placeholder="title" >
         </TextField.Root>
