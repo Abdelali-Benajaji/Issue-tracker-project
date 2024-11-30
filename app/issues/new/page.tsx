@@ -11,12 +11,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssuesSchema } from "@/app/validation";
 import { z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 type IssueForm = z.infer<typeof createIssuesSchema>;
 
 function NewIssue() {
 
   const [error ,setError] = useState('')
+  const [isSubmit ,setIsSubmit] = useState(false)
   const router = useRouter()
   const {register, control, handleSubmit, formState: { errors }} = useForm<IssueForm>({
     resolver :zodResolver(createIssuesSchema)
@@ -29,9 +31,11 @@ function NewIssue() {
         </Callout.Root>}
       <form className=' space-y-4' onSubmit={handleSubmit(async (data) =>{
         try {
+          setIsSubmit(true)
             await axios.post('/api/issues', data)
             router.push('/issues')
         } catch (error) {
+          setIsSubmit(false)
           setError("Unespected error")
         }
 
@@ -51,7 +55,7 @@ function NewIssue() {
           </ErrorMessage>
           
 
-          <Button>Create New Issue</Button>
+          <Button disabled={isSubmit}>Submit New Issue {isSubmit && <Spinner />}</Button>
 
       </form>
     </div>
