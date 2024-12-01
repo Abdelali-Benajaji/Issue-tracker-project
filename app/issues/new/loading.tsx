@@ -1,8 +1,16 @@
+import { Box } from '@radix-ui/themes'
 import React from 'react'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
-function CreateIssueLoading() {
+async function CreateIssueLoading() {
+
+
   return (
-    <div>loading...</div>
+    <Box className='max-w-xl'>
+      <Skeleton />
+      <Skeleton height="8rem"/>
+    </Box>
   )
 }
 
