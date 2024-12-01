@@ -5,6 +5,7 @@ import React from 'react'
 import IssuesStatusBadge from '../components/issuesStatusBadge'
 import delay from 'delay';
 import NewIssueButton from './NewIssueButton'
+import NavLink from '../components/nav-link'
 
 async function  IssuesPage() {
 
@@ -28,7 +29,7 @@ async function  IssuesPage() {
           {issues.map(issue => (
             <Table.Row key={issue.id}>
               <Table.Cell>
-                <Link href={`/issues/${issue.id}`}>{issue.title}</Link>
+                <NavLink href={`/issues/${issue.id}`}>{issue.title}</NavLink>
                 <div className='block md:hidden'>
                 <IssuesStatusBadge status={issue.Status}/>
                 </div>
