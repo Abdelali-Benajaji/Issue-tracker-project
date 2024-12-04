@@ -8,18 +8,14 @@ import {useForm, Controller} from "react-hook-form"
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createIssuesSchema } from "@/app/validation";
+import { IssuesSchema } from "@/app/validation";
 import { z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 import { Issue } from "@prisma/client";
+import SimpleMDE from "react-simplemde-editor";
 
-const SimpleMDE = dynamic(
-  () => import('react-simplemde-editor'),
-  {ssr: false}
-);
-
-type IssueFormData = z.infer<typeof createIssuesSchema>;
+type IssueFormData = z.infer<typeof IssuesSchema>;
 
 function IssueForm({issue}: {issue?:Issue}) {
 
@@ -27,14 +23,18 @@ function IssueForm({issue}: {issue?:Issue}) {
   const [isSubmit ,setIsSubmit] = useState(false)
   const router = useRouter()
   const {register, control, handleSubmit, formState: { errors }} = useForm<IssueFormData>({
-    resolver :zodResolver(createIssuesSchema)
+    resolver :zodResolver(IssuesSchema)
   });
 
   const OnSubmit = handleSubmit(async (data) =>{
     try {
       setIsSubmit(true)
+      if(issue)
+        await axios.patch('/api/issues/'+issue.id, data)
+      else
         await axios.post('/api/issues', data)
         router.push('/issues')
+        router.refresh();
     } catch (error) {
       setIsSubmit(false)
       setError("Unespected error")
@@ -50,7 +50,6 @@ function IssueForm({issue}: {issue?:Issue}) {
         </Callout.Root>}
 
       <form className=' space-y-4' onSubmit={OnSubmit}>
-          <h1>Create New Issue</h1>
           <TextField.Root defaultValue={issue?.title} placeholder="Title"  {...register('title')} />
           <ErrorMessage>
             {errors.title?.message}
@@ -66,7 +65,8 @@ function IssueForm({issue}: {issue?:Issue}) {
           </ErrorMessage>
           
 
-          <Button disabled={isSubmit}>Submit New Issue {isSubmit && <Spinner />}</Button>
+          <Button disabled={isSubmit}>
+            {issue ? 'Update Issue' : 'Submit New Issue '} {' '}{isSubmit && <Spinner />}</Button>
 
       </form>
     </div>
