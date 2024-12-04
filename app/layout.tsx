@@ -4,7 +4,7 @@ import './globals.css'
 
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { Theme, ThemePanel } from "@radix-ui/themes";
+import { Container, Theme, ThemePanel } from "@radix-ui/themes";
 import NavBar from './NavBar'
 
 const inter = Inter({
@@ -31,7 +31,7 @@ export default function RootLayout({
           <NavBar/>
 
           <main className='p-5 md:px-24'>
-            {children}
+            <Container>{children}</Container>
           </main> 
           </Theme>         
         </Theme>
