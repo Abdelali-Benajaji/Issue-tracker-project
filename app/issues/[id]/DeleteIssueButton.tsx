@@ -6,17 +6,21 @@ import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
+import delay from 'delay';
+import Spinner from '@/app/components/Spinner'
+
 
 function DeleteIssueButton({ issueId }: { issueId: number }) {
     const router = useRouter()
     const [error, setError] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
     return (
         <>
             <AlertDialog.Root>
                 <AlertDialog.Trigger>
-                    <Button color='red'>
+                    <Button color='red' disabled={isDeleting}>
                         <TrashIcon></TrashIcon>
-                        Delete issue
+                        {isDeleting && <Spinner />} Delete issue
                     </Button>
                 </AlertDialog.Trigger>
                 <AlertDialog.Content>
@@ -29,10 +33,12 @@ function DeleteIssueButton({ issueId }: { issueId: number }) {
                         <AlertDialog.Action>
                             <Button color='red' onClick={async () => {
                                 try {
+                                    setIsDeleting(true)
                                     await axios.delete('/api/issues/' + issueId)
                                     router.push('/issues')
                                     router.refresh()
                                 } catch (error) {
+                                    setIsDeleting(false)
                                     setError(true);
                                 }
 
